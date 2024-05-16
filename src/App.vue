@@ -2,25 +2,21 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import Navbar from './components/Navbar.vue';
+import Footer from './components/Footer.vue';
 </script>
 
 <template>
-	<header>
+	<div class="wrapper">
 		<Navbar />
-	</header>
-	<header>
-		<img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-		
-		<div class="wrapper">
-			<HelloWorld msg="You did it!" />
-			
-			<nav>
-				<RouterLink to="/">Home</RouterLink>
-				<RouterLink to="/about">About</RouterLink>
-				<RouterLink to="/test">Test</RouterLink>
-			</nav>
-		</div>
-	</header>
-	
-	<RouterView />
+		<RouterView />
+		<Footer />
+	</div>
 </template>
+
+<style scoped>
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+</style>
