@@ -13,6 +13,7 @@ onMounted(() => {
     const modalElement = document.getElementById('exampleModal')
     if (modalElement) {
         exampleModal = new Modal(modalElement)
+        exampleModal.show()
     }
 })
 

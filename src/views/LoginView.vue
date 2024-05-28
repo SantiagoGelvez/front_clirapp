@@ -1,16 +1,35 @@
 <script setup lang="ts">
-import { inject } from 'vue'
-import type { AxiosInstance } from 'axios'
+import { inject} from 'vue'
 import Swal from 'sweetalert2'
+import type { AxiosInstance } from 'axios'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const axiosRequest = inject('axiosRequest') as AxiosInstance
 
-function loginUser(event: Event) {
-    const formData = new FormData(event.target as HTMLFormElement)
+function alertLoading(action: string) {
+    if (action === 'show') {
+        Swal.fire({
+            title: 'Logging',
+            html: 'Please wait...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            showCancelButton: false
+        })
+    } else {
+        Swal.close()
+    }
+}
 
-    axiosRequest.post('/login', formData).then((response) => {
+function loginUser(event: Event) {
+    alertLoading('show')
+    const formData = new FormData(event.target as HTMLFormElement)
+    
+    axiosRequest.post('/login', formData)
+    .then((response) => {
+        alertLoading('hide')
+
         Swal.fire({
             icon: 'success',
             title: 'Login successful',
@@ -19,7 +38,7 @@ function loginUser(event: Event) {
         }).then(() => {
             router.push({ name: 'home' })
         })
-    }).catch((error) => {        
+    }).catch((error) => {
         if (error.response.status === 403) {
             Swal.fire({
                 icon: 'error',
@@ -37,22 +56,17 @@ function loginUser(event: Event) {
             <h1 class="h3 mb-5 text-center">Welcome back! Login to continue</h1>
             
             <div class="form-floating mb-2">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">Email address</label>
+                <input id="email" name="email" type="email" class="form-control" placeholder="name@example.com" required>
+                <label for="email">Email address</label>
             </div>
 
             <div class="form-floating mb-4">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                <label for="floatingPassword">Password</label>
+                <input id="password" name="password" type="password" class="form-control" placeholder="Password" required>
+                <label for="password">Password</label>
             </div>
             
-            <!-- <div class="form-check text-start my-3">
-                <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Remember me
-                </label>
-            </div> -->
-            <button class="btn btn-primary w-100 py-2" type="submit">Login</button>
+            <button class="btn btn-primary w-100 py-2 mb-2" type="submit">Login</button>
         </form>
+        <RouterLink to="signup" class="text-center">Don't have an account? Sign up</RouterLink>
     </main>
 </template>
